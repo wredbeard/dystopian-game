@@ -1,4 +1,4 @@
-# dystopian-game
+# DystopiaSim
 A Dystopian Text Based Management Game
 Please read everything below before doing anything else!
 
