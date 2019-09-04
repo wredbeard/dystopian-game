@@ -1,8 +1,9 @@
 from functions import new_game, read_game_config, scr_clr
 
+
 def main():
     scr_clr()
-    print("Welcome to Dystopia")
+    print("Welcome to DystopiaSim")
     print("\n----------------")
     print("Main Menu")
     print("----------------\n")
@@ -19,5 +20,5 @@ def main():
     else:
         main()
 
-main()
 
+main()
