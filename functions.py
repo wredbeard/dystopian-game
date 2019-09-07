@@ -15,12 +15,14 @@ my_rival = datagen.var_dict['rival']
 my_aide = datagen.var_dict['aide']
 my_world = datagen.var_dict['world']
 the_bank = datagen.var_dict['bank']
+my_economy = datagen.var_dict['economy']
 laws = datagen.var_dict['laws']
 aide_calc = datagen.aide()
 rand_name = datagen.people_name_selector()
 event_get = datagen.event_get
 
 
+#player input
 def prompt(selection_list, menu_title, pro_text):
     main_menu = SelectionMenu(selection_list, menu_title, None, None, None, pro_text, p_stats())
     main_menu.show()
@@ -28,19 +30,12 @@ def prompt(selection_list, menu_title, pro_text):
     return choice
 
 
-# handle player input
-
-
 # function to clear screen system independent
-
-
 def scr_clr():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 # persistent status bar
-
-
 def p_stats():
     ps0 = "\t\tPM:" + str(my_player['money'])
     ps1 = " PP:" + str(my_player['power'])
@@ -53,9 +48,8 @@ def p_stats():
     return ps7
 
 
-# implementation of player suicide. its a dystopia after all.
-
-
+# implementation of player suicide. its a dystopia after all. will have effects
+# on future games with persistence in database
 def suicide():
     scr_clr()
     selection_list = ['1|Back Out', '2|Follow Through']
@@ -82,8 +76,6 @@ def suicide():
 
 
 # generates 3 aides to choose from
-
-
 def aide_generator():
     aide_name = datagen.people_name_selector()
     aide_calc.names.append(aide_name)
@@ -104,11 +96,13 @@ def clear_data():
     my_party['might'] = 0
     my_party['org'] = 0
     my_party['membership'] = 0
+    my_party['in_power'] = False
     my_rival['membership'] = 0
     my_rival['power'] = 100
     my_rival['might'] = 100
     my_rival['funds'] = 10000
     my_rival['is_dead'] = False
+    my_rival['in_power'] = True
     the_bank['loan_out'] = False
     the_bank['funds'] = 0
     the_bank['loan'] = 0
@@ -118,14 +112,20 @@ def clear_data():
     my_aide['name'] = ''
     my_aide['is_dead'] = False
     my_world['population'] = 0
+    my_world['uprise'] = False
+    my_world['anger'] = 0
+    my_economy['businesses'] = 0
 
 
+# sets up new game and customization
 def new_game():
     scr_clr()
     clear_data()
     pop = datagen.gen_pop()
     my_world['population'] += pop
     datagen.membership_gen(pop)
+    business_no = pop * 1.3
+    my_economy['businesses'] == round(business_no)
     wordwrap("Welcome, everyone starts out here. You are the leader of your party. "
              "In order to continue to stay in power you must maintain your party's political power. "
              "You may enforce this whichever way you feel fit. As you progress you will "
@@ -153,6 +153,7 @@ def new_game():
     play_menu()
 
 
+# this is the main playing menu
 def play_menu():
     scr_clr()
     selections = ['Manage Party', 'Personal Actions', 'Plan B', 'Law and Order', 'End Turn', 'Save Game']
@@ -175,6 +176,8 @@ def play_menu():
         play_menu()
 
 
+# tools to manage party, will include managing staff for different in-game
+# effects, advisors, and disposal of said staff
 def manage_party_menu():
     scr_clr()
     selections = ['Manage Staff', 'Manage Campaign', 'Party Party', 'Main Menu']
@@ -191,8 +194,10 @@ def manage_party_menu():
         manage_party_menu()
 
 
+# some actions the player can take, will lead to more "adventure" style options
+# certain actions will affect game
 def actions_menu():
-    selections = ['Visit Bank', 'Walk the streets', '']
+    selections = ['Visit Bank', 'Walk the streets', 'n/a', 'Go Back']
     choice = prompt(selections, 'Player Actions', 'Certain actions are available to you to control your own personal'
                                                   ' power and position.')
     if choice == 0:
@@ -211,10 +216,13 @@ def actions_menu():
         actions_menu()
 
 
+# after player gains power, military may be used for martial law and prevention
+# of outside influence
 def military_actions():
     print()
 
 
+# after player gains power, this will be used to keep power
 def law_and_order():
     print()
 
@@ -242,6 +250,7 @@ def manage_staff_menu():
             manage_party_menu()
 
 
+# different ways to grow membership, gain funds, and damage rivals
 def manage_campaign_menu():
     scr_clr()
     selection = ['Growth Options - Grow Party Membership', 'Funding Options - Tactics To Raise Money',
@@ -254,9 +263,9 @@ def manage_campaign_menu():
         choice = prompt(selection, "Campaign Menu", "Here you can employ certain tactics to improve your party"
                                                     " power, raise money and reduce the popularity of opponents")
         if choice == 0:
-            selection1 = ['Posters - Place posters in various locations - 50 PaM', 'Rally - Rally in the capitol square'
-                                                                                   '- 500 PaM',
-                          'Force Popularity - Have brutes "convince" people to see things your way - '
+            selection1 = ['Place posters in various locations - 50 PaM', 'Rally in the capitol square'
+                          '- 500 PaM',
+                          'Have brutes "convince" people to see things your way - '
                           '1000 PaM', 'Go Back']
             choice1 = prompt(selection1, "Growth Actions", "You have several tactics at your disposal to grow"
                                                            " your party membership, these methods may not"
@@ -264,23 +273,43 @@ def manage_campaign_menu():
                                                            " several factors such as aide skill and current"
                                                            " membership")
             if choice1 == 0:
-                scr_clr()
-                prob = datagen.prob(1, 10) * 0.0000001
-                prob2 = datagen.prob(1, 10) * 0.0000001
-                pop = my_world['population']
-                rival_mems_gained = round(prob2 * my_rival['membership'])
-                gained = round(prob * pop)
-                total_gain = gained + rival_mems_gained
-                my_rival['membership'] -= rival_mems_gained
-                my_party['membership'] += total_gain
-                print("You've gained " + str(gained) + "members from the populace and " + str(rival_mems_gained) +
-                      " from The " + my_rival['party'])
+                my_party['money'] -= 50
+                growth_actions(1, 10)
+                wordwrap("\n Posters with your gleaming smile are pinned to power lines, apartment doors, and the face of an unforunate elderly woman")
+            if choice == 1:
+                my_party['money'] -= 500
+                growth_actions(1, 20)
+                wordwrap("\n A thunderous roar can be heard from the town square. Surely, the speaker is making waves.")
+            if choice == 2:
+                my_party['money'] -= 1000
+                growth_actions(1, 30)
+                wordwrap("\n Broken glass, fires, and bodies surround a shivering group of people who pledge to support your party.")
                 time.sleep(5)
-                manage_campaign_menu()
             else:
                 manage_campaign_menu()
+        if choice == 1:
+            selection2 = ['Intimidate businesses -1 PaP', '']
 
 
+# actions for growing membership; more membership, more power per turn
+def growth_actions(min_member_acquired, max_member_acquired):
+    scr_clr()
+    prob = datagen.prob(min_member_acquired, max_member_acquired) * 0.0000001
+    prob2 = datagen.prob(min_member_acquired, max_member_acquired) * 0.0000001
+    pop = my_world['population']
+    rival_mems_gained = round(prob2 * my_rival['membership'])
+    gained = round(prob * pop)
+    total_gain = gained + rival_mems_gained
+    my_rival['membership'] -= rival_mems_gained
+    my_party['membership'] += total_gain
+    print("You've gained " + str(gained) + "members from the populace and " + str(rival_mems_gained) +
+          " from The " + my_rival['party'])
+    input("Press ENTER to continue")
+    datagen.write_game_config()
+    manage_campaign_menu()
+
+
+# aide selection process, generates three random aides to choose
 def aide_selector():
     scr_clr()
     p_stats()
@@ -340,6 +369,7 @@ def aide_selector():
             aide_selector()
 
 
+# handles meetings with aide and actions available
 def aide_meeting():
     scr_clr()
     message_1 = "Hello, " + my_player['title'] + my_player['name']
@@ -365,6 +395,7 @@ def aide_meeting():
         manage_staff_menu()
 
 
+# handles the death of an aide
 def aide_death_routine():
     if my_aide['is_dead'] is True:
         scr_clr()
@@ -376,7 +407,7 @@ def aide_death_routine():
     else:
         play_menu()
 
-
+# handles death of a rival
 def rival_death_routine():
     if my_rival['is_dead'] is True:
         print("Your rival" + my_rival['name'] + 'has "mysteriously" died.')
@@ -386,15 +417,19 @@ def rival_death_routine():
     print()
 
 
+# wordwrapping function
 def wordwrap(s):
     print('\n'.join(textwrap.wrap(s, width=80, replace_whitespace=False)))
 
 
+# wordwrapping that returns wrapped text, needed for certain implementations
+# where print should not be called i.e. in menus
 def ww(s):
     wrapped = textwrap.wrap(s, width=80, replace_whitespace=False)
     return wrapped
 
 
+# old, will refactor out
 def read_game_config():
     play_menu()
 
@@ -414,7 +449,7 @@ def bank():
                                                                 ' interest rate is: ' + str(p_interest) + ' %')
     scr_clr()
     if choice == 0:
-        # handle deposits
+        # handle deposits and protect against non-int
         try:
             scr_clr()
             print("How much would you like to deposit? You have " + str(my_player['money']))
@@ -438,7 +473,7 @@ def bank():
             bank()
 
     elif choice == 1:
-        # handle withdrawals
+        # handle withdrawals and protect against non-int
         try:
             print("How much would you like to withdraw? You have " + str(the_bank['p_money']))
             withdraw = int(input(''))
@@ -483,6 +518,7 @@ def bank():
                 scr_clr()
                 print("We are pleased that you have chosen to take out a loan.")
                 loan_amt = int(input("Please enter desired loan amount up to " + str(round(max_loan)) + ": "))
+                # safely handles loans so player doesn't crash with non-int
                 try:
                     if loan_amt <= max_loan:
                         scr_clr()
@@ -524,6 +560,7 @@ def bank():
             print('\n\nHow much would you like to pay back?')
             pay_loan = int(input("Pay back amt: "))
             try:
+                # safely handle payback in case of non-int
                 if my_player['money'] >= pay_loan and pay_loan <= the_bank['loan']:
                     the_bank['loan'] -= pay_loan
                     my_player['money'] -= pay_loan
@@ -551,6 +588,7 @@ def bank():
         bank()
 
 
+# simple voting roll, will be replaced with more comprehensive roll
 def vote():
     x = datagen.event_roll()
     if x > 50:
@@ -560,9 +598,16 @@ def vote():
     return my_party['lvote']
 
 
+# run turn-end computations and save effects; outputs a summary of player
+# attributes with advice
 def end_turn():
     loan_interest()
     player_interest()
+    turn_party_power()
+    total_mems = my_party['membership'] + my_rival['membership']
+    if total_mems != my_world['population']:
+        turn_membership_gain()
+    tax_collection()
     print("---------------"
           "\nYou"
           "\n---------------")
@@ -607,14 +652,36 @@ def end_turn():
     if 10 <= my_party['power'] <= 50:
         print("\n-Your party power is okay. But okay is all they are saying about your party.")
     if 50 < my_party['power'] < 100:
+        my_rival['in_power'] == False
+        my_party['in_power'] == True
         print("Your party is dominating the national congress.")
     if my_party['power'] >= 100:
         print("Your party has reached supreme power within the national congress.")
+    if my_party['in_power']:
+        print("Treasury amount: " + my_economy['treasury'])
     datagen.write_game_config()
-    input("Press any key to continue...")
+    input("Press ENTER key to continue...")
     play_menu()
 
 
+# collects taxes, implements building resentment from taxes in case of
+# player increase above 10% total p_tax = people tax b_tax = business tax
+def tax_collection():
+    p_tax_percent = my_economy['p_tax'] * .001
+    b_tax_percent = my_economy['b_tax'] * .001
+    p_tax_income = my_world['population'] * p_tax_percent
+    b_tax_income = my_economy['businesses'] * b_tax_percent
+    my_economy['treasury'] += round(p_tax_income) + round(b_tax_income)
+    if my_party['in_power']:
+        print("\nYou earn " + str(round(p_tax_income))) + " from the citizens\n."
+        print("\nYou earn " + str(round(b_tax_income))) + " from businesses."
+    tax_anger_mod = my_economy['p_tax'] + my_economy['b_tax']
+    if tax_anger_mod > 10:
+        set_anger = tax_anger_mod * .0001
+        my_world['anger'] += round(set_anger)
+
+
+# accumulates per-turn loan interest
 def loan_interest():
     if the_bank['loan_out']:
         interest_gained = the_bank['loan'] * the_bank['i_interest']
@@ -624,14 +691,41 @@ def loan_interest():
         pass
 
 
+# accumulates player bank deposits interest
 def player_interest():
     if the_bank['p_money'] > 0:
         interest_gained = the_bank['p_money'] * the_bank['p_interest']
         round(interest_gained)
-        the_bank['p_money'] += interest_gained
+        the_bank['p_money'] += interest_gainedwredbeard-patch-1
     else:
         pass
 
 
+# power accumulation based on membership
+def turn_party_power():
+    power = .00001
+    power_gained = my_party['membership'] * power
+    my_party['power'] += round(power_gained)
+    rival_power_gained = my_rival['membership'] * power
+    my_rival['power'] += round(rival_power_gained)
+    scr_clr()
+    print("party" + str(power_gained))
+    print("rival" + str(rival_power_gained))
+    time.sleep(5)
+
+
+# membership gain based on power
+def turn_membership_gain():
+    pull = 0.000001 * my_rival['power']
+    pop = my_world['population']
+    pop_pull = pop * pull
+    my_rival['membership'] += round(pop_pull)
+    my_pull = 0.000001 * my_party['power']
+    my_pop = my_world['population']
+    my_pop_pull = pop * pull
+    my_party['membership'] += round(my_pop_pull)
+
+
+# prevent play_menu from being called on game start
 if __name__ == "__main__":
     play_menu()
