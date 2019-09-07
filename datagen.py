@@ -101,6 +101,7 @@ def random_conversation():
         return randomconvo
 
 
+
 # go ahead and open config file for writing
 with open('config.json', 'r') as infile:
     var_dict = json.load(infile)
