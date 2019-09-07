@@ -41,7 +41,7 @@ Here are the things I would like to do as far as the actual coding of the game i
 - Implement Better Coding Practices - This is number one. I am painfully aware that there are much better ways to accomplish the things I need the program to do. However, I am limited in my knowledge and have implemented features to the best of my abilities. It is my hope that by introducing the code to this game to the community we might find better ways to do things and make the game more efficient and fun for players. I want this game to be a community project built around user input.
 - Platform Independent - I want the game to be playable by the public at large. I've done everything I can so far to make the game as platform independent as possible. I've utilized libraries that do not explicitly rely on platform dependent packages. In addition to this, if there is some way to make the game one-click install I would like to do so.
 - User Built - If enough of the community agrees on a gameplay feature, I want to implement it. The story and gameplay should please the people who will ultimately be playing the game.
-- Better Notation And Commenting - I will personally be working on this. I realize that most of the functions are not explained so I will be fixing that over time.
+- Better Notation And Commenting - I will personally be working on this. Most of the functions are now explained!
 
 ## Future Features
 With the goal of making this game as extensible and flexible as possible, I would like to continue to implement new gameplay features over time. Of course, getting the basics down is the first goal. Everything should be in a dystopian style.
