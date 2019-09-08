@@ -439,7 +439,7 @@ def bank():
     # setup variables
     interest = the_bank['p_interest']
     # variable created to display interest in percentage
-    p_interest = interest * 100
+    p_interest = interest * 10
     selections = ['Deposit', 'Withdraw', 'Take Loan', 'Pay Loan', 'Main Menu']
     # if player party has complete power or law enacted they can change the bank interest rate
     # lower amounts should create more income
