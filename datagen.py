@@ -21,7 +21,14 @@ def party_name_selector():
     d = open('populace.json')
     populace = {}
 """
-
+# displays laws from laws.json
+def law_roster():
+    with open('laws.json') as json_file:
+        data = json.load(json_file)
+        laws_to_it = []
+        for key in data['laws'].values():
+            laws_to_it.append(key['description'])
+        print('\n'.join('{}: {}'.format(*k) for k in enumerate(laws_to_it)))
 
 # generates random names to pass to functions
 def people_name_selector():

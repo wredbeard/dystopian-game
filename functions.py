@@ -17,6 +17,7 @@ my_world = datagen.var_dict['world']
 the_bank = datagen.var_dict['bank']
 my_economy = datagen.var_dict['economy']
 laws = datagen.var_dict['laws']
+my_government = datagen.var_dict['government']
 aide_calc = datagen.aide()
 rand_name = datagen.people_name_selector()
 event_get = datagen.event_get
@@ -115,6 +116,8 @@ def clear_data():
     my_world['uprise'] = False
     my_world['anger'] = 0
     my_economy['businesses'] = 0
+    my_government['p_mems'] = prob(50, 100)
+    my_government['r_mems'] = 400 - my_government['p_mems']
 
 
 # sets up new game and customization
@@ -180,18 +183,39 @@ def play_menu():
 # effects, advisors, and disposal of said staff
 def manage_party_menu():
     scr_clr()
-    selections = ['Manage Staff', 'Manage Campaign', 'Party Party', 'Main Menu']
+    selections = ['Manage Staff', 'Manage Campaign', 'House Floor', 'Main Menu']
     choice = prompt(selections, "Party Management", 'Here is where you manage your party.')
     if choice == 0:
         manage_staff_menu()
     elif choice == 1:
         manage_campaign_menu()
     elif choice == 2:
-        manage_party_menu()
+        house_floor()
     elif choice == 3:
         play_menu()
     else:
         manage_party_menu()
+
+
+def house_floor():
+    scr_clr()
+    selections = ['Check roster - see laws up for vote',
+                  'Propose law - propose a new law',
+                  'Party Vote - convince your party on a vote',
+                  'Stall Vote - stall vote until next turn']
+    choice1 = prompt(selections, "House Floor", "Cigar smoke fills the"
+                                      " great chamber "
+                                      " where the fate of the people is "
+                                      " decided by the whims of an elite "
+                                      " class of people who don't understand "
+                                      " them in the slightest. "
+                                      " Happiness is their inhale, and the "
+                                      " ever whittled will of the masses "
+                                      " is their exhale. ")
+    if choice1 == 0:
+        datagen.law_roster()
+    else:
+        play_menu()
 
 
 # some actions the player can take, will lead to more "adventure" style options
@@ -364,6 +388,8 @@ def aide_selector():
                 manage_party_menu()
         elif choice == 1:
             my_aide['name'] = ''
+            manage_party_menu()
+        elif choice == 2:
             manage_party_menu()
         else:
             aide_selector()

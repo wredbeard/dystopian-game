@@ -1,7 +1,12 @@
-{"laws": {
+{"laws":{  "law001":{
 	"no": "001",
 	"description": "Install CCTV Cameras On Every Street Corner",
 	"key": "",
 	"value": "",
-	"effect": 0
-}}
+	"effect": 0},
+	"law002": {
+	"no": "002",
+	"description": "Implement curfew at 8:00 PM",
+	"key": "",
+  "value": "",
+	"effect": 0}}}
