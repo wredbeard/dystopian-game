@@ -4,7 +4,6 @@ import sys
 import textwrap
 import datagen
 import random
-from consolemenu import *
 from colorama import init, Fore, Style
 
 init()
@@ -22,12 +21,17 @@ rand_name = datagen.people_name_selector()
 event_get = datagen.event_get
 
 
-#player input
 def prompt(selection_list, menu_title, pro_text):
-    main_menu = SelectionMenu(selection_list, menu_title, None, None, None, pro_text, p_stats())
-    main_menu.show()
-    choice = main_menu.current_option
-    return choice
+    bar_length = p_stats()
+    print("\t" + "-" * len(bar_length))
+    print(p_stats())
+    print("\t" + "-" * len(bar_length))
+    print(menu_title)
+    print("\n" + pro_text + "\n")
+    print(*selection_list, sep='\n')
+    selection = input("\n\nWhat shall we do?")
+    return selection
+
 
 
 # function to clear screen system independent
@@ -56,11 +60,11 @@ def suicide():
     choice = prompt(selection_list, "The Last Choice", "If you are feeling particularly weary you may exit the game"
                                                        " via suicide. This will have interesting effects on your next"
                                                        " playthrough.")
-    if choice == 0:
+    if choice == '1':
         print(Style.RESET_ALL + "Good... The world is better with you around.")
         time.sleep(3)
         play_menu()
-    elif choice == 1:
+    elif choice == '2':
         print("I don't know why you made this choice. I can only assume your back was against the wall.")
         time.sleep(3)
         print("\nI would have understood if you had told me.")
@@ -107,8 +111,8 @@ def clear_data():
     the_bank['funds'] = 0
     the_bank['loan'] = 0
     the_bank['p_money'] = 0
-    the_bank['p_interest'] = 0.5
-    the_bank['i_interest'] = 0.7
+    the_bank['p_interest'] = 0.05
+    the_bank['i_interest'] = 0.07
     my_aide['name'] = ''
     my_aide['is_dead'] = False
     my_world['population'] = 0
@@ -125,7 +129,7 @@ def new_game():
     my_world['population'] += pop
     datagen.membership_gen(pop)
     business_no = pop * 1.3
-    my_economy['businesses'] == round(business_no)
+    my_economy['businesses'] = round(business_no)
     wordwrap("Welcome, everyone starts out here. You are the leader of your party. "
              "In order to continue to stay in power you must maintain your party's political power. "
              "You may enforce this whichever way you feel fit. As you progress you will "
@@ -156,21 +160,21 @@ def new_game():
 # this is the main playing menu
 def play_menu():
     scr_clr()
-    selections = ['Manage Party', 'Personal Actions', 'Plan B', 'Law and Order', 'End Turn', 'Save Game']
+    selections = ['1|Manage Party', '2|Personal Actions', '3|Plan B', '4|Law and Order', '5|End Turn', '6|Save Game']
     if my_party['power'] < 51:
-        selections[3] = 'Law and Order - Not Available'
+        selections[3] = '4|Law and Order - Not Available'
     choice = prompt(selections, 'Main Menu', 'Here are your current action choices')
-    if choice == 0:
+    if choice == '1':
         manage_party_menu()
-    elif choice == 1:
+    elif choice == '2':
         actions_menu()
-    elif choice == 4:
+    elif choice == '5':
         end_turn()
-    elif my_party['power'] == 51 and choice == 3:
+    elif my_party['power'] == 51 and choice == '4':
         law_and_order()
-    elif choice == 5:
+    elif choice == '6':
         datagen.write_game_config()
-    elif choice == 2:
+    elif choice == '3':
         suicide()
     else:
         play_menu()
@@ -180,15 +184,15 @@ def play_menu():
 # effects, advisors, and disposal of said staff
 def manage_party_menu():
     scr_clr()
-    selections = ['Manage Staff', 'Manage Campaign', 'Party Party', 'Main Menu']
+    selections = ['1|Manage Staff', '2|Manage Campaign', '3|Party Party', '4|Main Menu']
     choice = prompt(selections, "Party Management", 'Here is where you manage your party.')
-    if choice == 0:
+    if choice == '1':
         manage_staff_menu()
-    elif choice == 1:
+    elif choice == '2':
         manage_campaign_menu()
-    elif choice == 2:
+    elif choice == '3':
         manage_party_menu()
-    elif choice == 3:
+    elif choice == '4':
         play_menu()
     else:
         manage_party_menu()
@@ -197,18 +201,18 @@ def manage_party_menu():
 # some actions the player can take, will lead to more "adventure" style options
 # certain actions will affect game
 def actions_menu():
-    selections = ['Visit Bank', 'Walk the streets', 'n/a', 'Go Back']
+    selections = ['1|Visit Bank', '2|Walk the streets', '3|n/a', '4|Go Back']
     choice = prompt(selections, 'Player Actions', 'Certain actions are available to you to control your own personal'
                                                   ' power and position.')
-    if choice == 0:
+    if choice == '1':
         bank()
-    if choice == 1:
+    if choice == '2':
         scr_clr()
         print("You have a random conversation.")
         print("\nSomeone says: " + datagen.random_conversation())
         time.sleep(5)
         actions_menu()
-    if choice == 2:
+    if choice == '3':
         print("Not available yet. ")
         time.sleep(3)
         actions_menu()
@@ -234,27 +238,27 @@ def manage_staff_menu():
         aide_selector()
     else:
         print("Your current top aide is: " + my_aide['name'])
-        selection = ['Meet With Aide', 'Fire Aide', 'Go Back']
+        selection = ['1|Meet With Aide', '2|Fire Aide', '3|Go Back']
         choice = prompt(selection, "Manage Aide", "Here you can arrange a meeting with your aide to gain valuable "
                                                   "insight on your party and government.")
-        if choice == 0:
+        if choice == '1':
             aide_meeting()
-        elif choice == 1:
+        elif choice == '2':
             # dump character from the script
             print("You have fired your aide. It was probably for the best, right?")
             print("Your aide goes home. A loud bang is heard from the inside of the house.")
             time.sleep(5)
             my_aide['is_dead'] = True
             aide_death_routine()
-        elif choice == 2:
+        elif choice == '3':
             manage_party_menu()
 
 
 # different ways to grow membership, gain funds, and damage rivals
 def manage_campaign_menu():
     scr_clr()
-    selection = ['Growth Options - Grow Party Membership', 'Funding Options - Tactics To Raise Money',
-                 'Anti-Opponent - Damage Reputations, etc.']
+    selection = ['1|Growth Options - Grow Party Membership', '2|Funding Options - Tactics To Raise Money',
+                 '3|Anti-Opponent - Damage Reputations, etc.']
     if my_aide['name'] == '':
         print("You need to pick an aide before you can access these options")
         time.sleep(3)
@@ -262,32 +266,32 @@ def manage_campaign_menu():
     else:
         choice = prompt(selection, "Campaign Menu", "Here you can employ certain tactics to improve your party"
                                                     " power, raise money and reduce the popularity of opponents")
-        if choice == 0:
-            selection1 = ['Place posters in various locations - 50 PaM', 'Rally in the capitol square'
+        if choice == '1':
+            selection1 = ['1|Place posters in various locations - 50 PaM', '2|Rally in the capitol square'
                           '- 500 PaM',
-                          'Have brutes "convince" people to see things your way - '
-                          '1000 PaM', 'Go Back']
+                          '3|Have brutes "convince" people to see things your way - '
+                          '1000 PaM', '4|Go Back']
             choice1 = prompt(selection1, "Growth Actions", "You have several tactics at your disposal to grow"
                                                            " your party membership, these methods may not"
                                                            " always be effective. Their success depends on"
                                                            " several factors such as aide skill and current"
                                                            " membership")
-            if choice1 == 0:
+            if choice1 == '1':
                 my_party['money'] -= 50
                 growth_actions(1, 10)
                 wordwrap("\n Posters with your gleaming smile are pinned to power lines, apartment doors, and the face of an unforunate elderly woman")
-            if choice == 1:
+            if choice == '2':
                 my_party['money'] -= 500
                 growth_actions(1, 20)
                 wordwrap("\n A thunderous roar can be heard from the town square. Surely, the speaker is making waves.")
-            if choice == 2:
+            if choice == '3':
                 my_party['money'] -= 1000
                 growth_actions(1, 30)
                 wordwrap("\n Broken glass, fires, and bodies surround a shivering group of people who pledge to support your party.")
                 time.sleep(5)
             else:
                 manage_campaign_menu()
-        if choice == 1:
+        if choice == '2':
             selection2 = ['Intimidate businesses -1 PaP', '']
 
 
@@ -314,9 +318,9 @@ def aide_selector():
     scr_clr()
     p_stats()
     if my_aide['name'] == '':
-        selections = ['Hire Aide', 'Nevermind']
+        selections = ['1|Hire Aide', '2|Nevermind']
         choice = prompt(selections, "Hire Aide?", "You currently have no Top Aide. Would you like to hire one?")
-        if choice == 0:
+        if choice == '1':
             scr_clr()
             for _ in range(3):
                 aide_generator()
@@ -334,7 +338,7 @@ def aide_selector():
                                                        " setting up meetings, political attacks, and certain "
                                                        "covert activities. You must have an aide to access staff menus")
             print()
-            if choice == 0:
+            if choice == '1':
                 if aide_calc.prices[0] > my_player['money']:
                     print("You can not afford this aide.")
                     aide_selector()
@@ -342,7 +346,7 @@ def aide_selector():
                 my_aide['skill'] = aide_calc.skills[0]
                 my_player['money'] -= aide_calc.prices[0]
                 manage_staff_menu()
-            elif choice == 1:
+            elif choice == '2':
                 if aide_calc.prices[1] > my_player['money']:
                     print("You can not afford this aide.")
                     aide_selector()
@@ -350,7 +354,7 @@ def aide_selector():
                 my_aide['skill'] = aide_calc.skills[1]
                 my_player['money'] -= aide_calc.prices[1]
                 manage_staff_menu()
-            elif choice == 2:
+            elif choice == '3':
                 if aide_calc.prices[2] > my_player['money']:
                     print("You can not afford this aide.")
                     aide_selector()
@@ -362,7 +366,7 @@ def aide_selector():
                 print("Nevermind, then")
                 time.sleep(3)
                 manage_party_menu()
-        elif choice == 1:
+        elif choice == '2':
             my_aide['name'] = ''
             manage_party_menu()
         else:
@@ -373,15 +377,15 @@ def aide_selector():
 def aide_meeting():
     scr_clr()
     message_1 = "Hello, " + my_player['title'] + my_player['name']
-    choice = prompt(['Advice', 'Do Some Work [-50 PM]', 'Go Back'], my_aide['name'], message_1)
-    if choice == 0:
+    choice = prompt(['1|Advice', '2|Do Some Work [-50 PM]', '3|Go Back'], my_aide['name'], message_1)
+    if choice == '1':
         if my_player['money'] < 1000:
             message_2 = "You should work on building your money"
         else:
             message_2 = "Things look good on money"
         prompt(['Thanks'], None, message_2)
         aide_meeting()
-    if choice == 1:
+    if choice == '2':
         if my_player['money'] > 50:
             my_player['money'] -= 50
             e = datagen.random_event()
@@ -391,7 +395,7 @@ def aide_meeting():
         else:
             print("You can not afford this.")
             aide_meeting()
-    if choice == 2:
+    if choice == '3':
         manage_staff_menu()
 
 
@@ -439,8 +443,8 @@ def bank():
     # setup variables
     interest = the_bank['p_interest']
     # variable created to display interest in percentage
-    p_interest = interest * 10
-    selections = ['Deposit', 'Withdraw', 'Take Loan', 'Pay Loan', 'Main Menu']
+    p_interest = interest * 100
+    selections = ['1|Deposit', '2|Withdraw', '3|Take Loan', '4|Pay Loan', '5|Main Menu']
     # if player party has complete power or law enacted they can change the bank interest rate
     # lower amounts should create more income
     if my_party['power'] > 99 or laws['001'] is True:
@@ -448,7 +452,7 @@ def bank():
     choice = prompt(selections, 'Welcome to The National Bank', 'The current customer'
                                                                 ' interest rate is: ' + str(p_interest) + ' %')
     scr_clr()
-    if choice == 0:
+    if choice == '1':
         # handle deposits and protect against non-int
         try:
             scr_clr()
@@ -472,7 +476,7 @@ def bank():
             time.sleep(3)
             bank()
 
-    elif choice == 1:
+    elif choice == '2':
         # handle withdrawals and protect against non-int
         try:
             print("How much would you like to withdraw? You have " + str(the_bank['p_money']))
@@ -495,7 +499,7 @@ def bank():
             print('Funny joke...')
             time.sleep(3)
             bank()
-    elif choice == 2:
+    elif choice == '3':
         # handle issuing of loans
         if not the_bank['loan_out']:
             # get the bank's current institutional interest
@@ -550,11 +554,11 @@ def bank():
             print("Please come back when you have paid your current loan.")
             input("Press enter to continue...")
             bank()
-    elif choice == 3:
+    elif choice == '4':
         # handle payback of loans
-        selection_list = ['Pay Back Loan', 'Go Back']
+        selection_list = ['1|Pay Back Loan', '2|Go Back']
         choice1 = prompt(selection_list, "Pay Back Loan", "Your current loan is: " + str(the_bank['loan']))
-        if choice1 == 0:
+        if choice1 == '1':
             scr_clr()
             print("Your loan currently stands at: " + str(the_bank['loan']))
             print('\n\nHow much would you like to pay back?')
@@ -583,7 +587,8 @@ def bank():
                     bank()
             except TypeError:
                 pass
-
+        else:
+            bank()
     else:
         bank()
 
@@ -652,8 +657,8 @@ def end_turn():
     if 10 <= my_party['power'] <= 50:
         print("\n-Your party power is okay. But okay is all they are saying about your party.")
     if 50 < my_party['power'] < 100:
-        my_rival['in_power'] == False
-        my_party['in_power'] == True
+        my_rival['in_power'] = False
+        my_party['in_power'] = True
         print("Your party is dominating the national congress.")
     if my_party['power'] >= 100:
         print("Your party has reached supreme power within the national congress.")
@@ -696,7 +701,7 @@ def player_interest():
     if the_bank['p_money'] > 0:
         interest_gained = the_bank['p_money'] * the_bank['p_interest']
         round(interest_gained)
-        the_bank['p_money'] += interest_gainedwredbeard-patch-1
+        the_bank['p_money'] += interest_gained
     else:
         pass
 
