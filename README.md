@@ -57,8 +57,8 @@ With the goal of making this game as extensible and flexible as possible, I woul
 This list will be added and reduced as we further develop the game.
 
 ## Packages Needed To Run
-colorama
-console-menu
+-colorama - soon to be removed
+-We highly recommend using python 3.7 to run the game
 
 ## A Warning
 This game is in pre-pre-alpha. It is not designed to be playable yet as it is not complete. However, a lot of the framework has been coded and needs to be made more efficient. It is hot garbage right now. But that will change.
