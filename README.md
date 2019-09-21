@@ -1,6 +1,8 @@
 # DystopiaSim
 A Dystopian Text Based Management Game
+
 Keep up with us here: [Our Website](https://wredbeard.wixsite.com/website/blog)
+
 Please read everything below before doing anything else!
 
 ## What's It About
