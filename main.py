@@ -1,24 +1,16 @@
-from functions import new_game, read_game_config, scr_clr
+import menus
 
-
-def main():
-    scr_clr()
-    print("Welcome to DystopiaSim")
-    print("\n----------------")
-    print("Main Menu")
-    print("----------------\n")
-    print("1 - New Game\n")
-    print("2 - Load Game\n")
-    print("3 - Exit\n")
-    choice = input("Enter desired command number and press ENTER: ")
+def main_menu():
+    selections = ['1|New Game', '2|Continue Game', '3|Settings', '4|Exit']
+    print(selections, sep='\n')
+    choice = input("\n\n\n> ")
     if choice == '1':
-        new_game()
-    elif choice == '2':
-        read_game_config()
-    elif choice == '3':
-        print("settings")
+        menus.game_new_menu()
+    if choice == '2':
+        menus.game_play_menu()
+    if choice == '3':
+        menus.game_settings_menu()
     else:
-        main()
+        return 0
 
-
-main()
+main_menu()
