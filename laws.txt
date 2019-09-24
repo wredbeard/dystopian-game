@@ -1,2 +1,0 @@
-001 - "Vote on changing bank interest."
-002 - ""
