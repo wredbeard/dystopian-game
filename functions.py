@@ -7,7 +7,7 @@ def screen_clear():
     print("\n" * 100)
 
 
-#wraps long text
+# wraps long text
 def wrd_wrp(str_to_wrap):
     print('\n'.join(textwrap.wrap(str_to_wrap, width=79, replace_whitespace=False)))
 
@@ -62,6 +62,7 @@ def gen_report_crime():
     print("\nAs well as an estimated " + str(game_config['crime']['crimes']['other']) + " crimes we have not yet "
                                                                                         "made up.")
 
+
 def gen_report_economy():
     wrd_wrp("\nWe currently have around " + str(game_config['economy']['businesses']) + " factories and farms"
             " under our thumb.")
@@ -92,7 +93,6 @@ def gen_report_bank():
     print("\nThe National Bank Income: + " + str(round(bank_revenue)))
 
 
-
 def bank_deposit():
     print("How much money would you like to deposit?")
     print("\nYou can deposit up to " + str(game_config['player']['money']))
@@ -105,14 +105,16 @@ def bank_deposit():
             elif deposit_amount <= game_config['player']['money']:
                 game_config['bank']['p_money'] += deposit_amount
                 game_config['player']['money'] -= deposit_amount
+                game_config['bank']['total_funds'] += deposit_amount
                 game_config_write()
             else:
                 print("I'm taking the day off...")
         else:
             print("You deposit nothing.")
-    except:
+    except TypeError:
         print("Do you think bankers have a sense of humor?")
         bank_deposit()
+
 
 def bank_withdraw():
     print("How much would you like to withdraw? ")
@@ -127,19 +129,66 @@ def bank_withdraw():
             elif withdraw_amount <= game_config['bank']['p_money']:
                 game_config['bank']['p_money'] -= withdraw_amount
                 game_config['player']['money'] += withdraw_amount
+                game_config['bank']['total_funds'] -= withdraw_amount
                 game_config_write()
             else:
                 print("I'm taking the day off...")
         else:
             print("You withdraw nothing.")
-    except:
+    except TypeError:
         print("Do you think bankers have a sense of humor?")
         bank_deposit()
 
 
 def bank_loan():
-    pass
+    loan_max = game_config['player']['money'] * 0.30
+    if game_config['bank']['loan_out']:
+        print("Please resolve your current loan before taking another.")
+    else:
+        print("\nMax loan amount: " + str(round(loan_max)))
+        try:
+            loan_requested = int(input("Please enter your desired loan amount. "))
+            if loan_requested > loan_max:
+                print("\nYou can not take more than the maximum loan.")
+            elif loan_requested <= loan_max:
+                print("\nLoan approved: " + str(loan_requested))
+                game_config['bank']['loan'] = loan_requested
+                game_config['player']['money'] += loan_requested
+                game_config['bank']['loan_out'] = True
+                game_config['bank']['total_loaned'] += loan_requested
+            else:
+                print("\nYou take no loan.")
+                game_config_write()
+        except TypeError:
+            print("That's not a number.")
+            bank_loan()
 
 
 def bank_pay_loan():
-    pass
+    if not game_config['bank']['loan_out']:
+        print("You do not have any loans to pay.")
+    else:
+        print("\nOutstanding balance: " + str(game_config['bank']['loan']))
+        try:
+            loan_to_pay = int(input("\nHow much would you like to pay back? "))
+            if loan_to_pay <= game_config['player']['money']:
+                if loan_to_pay > game_config['bank']['loan']:
+                    print("\nThat is more than your current balance.")
+                    bank_pay_loan()
+                elif loan_to_pay < game_config['bank']['loan']:
+                    loan_new_balance = game_config['bank']['loan'] - loan_to_pay
+                    game_config['player']['money'] -= loan_to_pay
+                    game_config['bank']['loan'] -= loan_to_pay
+                    game_config['bank']['total_loaned'] -= loan_to_pay
+                    print("Your new balance is: " + str(loan_new_balance))
+                elif loan_to_pay == game_config['bank']['loan']:
+                    game_config['player']['money'] -= loan_to_pay
+                    game_config['bank']['loan'] = 0
+                    game_config['bank']['loan_out'] = False
+                    game_config['bank']['total_loaned'] += loan_to_pay
+                    print("\nYou have paid off your loan.")
+                else:
+                    print("\nYou pay nothing.")
+                    game_config_write()
+        except TypeError:
+            print("\nI have no had enough coffee to deal with your 'ineptitude'.")
