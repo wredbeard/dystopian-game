@@ -1,5 +1,6 @@
 import menus
 
+
 def main_menu():
     selections = ['1|New Game', '2|Continue Game', '3|Settings', '4|Exit']
     print(*selections, sep='\n')
@@ -12,5 +13,6 @@ def main_menu():
         menus.game_settings_menu()
     else:
         return 0
+
 
 main_menu()

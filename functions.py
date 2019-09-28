@@ -1,5 +1,9 @@
-from data import game_config, game_config_write
+from data import game_config, game_config_write, game_laws
 import textwrap
+import colors
+
+
+color = colors.GameColors()
 
 
 # a simple cross platform way of clearing the console screen
@@ -10,6 +14,15 @@ def screen_clear():
 # wraps long text
 def wrd_wrp(str_to_wrap):
     print('\n'.join(textwrap.wrap(str_to_wrap, width=79, replace_whitespace=False)))
+
+
+# makes functions where something needs to be displayed to user prettier
+def content_template(title, text):
+    print("-" * len(title) * 2)
+    print(title)
+    print("-" * len(title) * 2)
+    wrd_wrp(text)
+    print("\n\n\n")
 
 
 # resets values for a new game
@@ -192,3 +205,29 @@ def bank_pay_loan():
                     game_config_write()
         except TypeError:
             print("\nI have no had enough coffee to deal with your 'ineptitude'.")
+
+
+# key of category in laws.json is passed to handler to activate/deactivate laws
+def law_activation_handler(law_cat):
+    content_template(game_laws[law_cat]['title'], game_laws[law_cat]['desc'])
+    law = {}
+    for x in game_laws[law_cat]['laws']:
+        law[x] = game_laws[law_cat]['laws'][x]['name']
+        active = game_laws[law_cat]['laws'][x]['active']
+        desc = game_laws[law_cat]['laws'][x]['desc']
+        if active:
+            print(x + "| " + law[x] + " - " + desc + color.GREEN + " - Active\n" + color.RESET, sep='\n')
+        else:
+            print(x + "| " + law[x] + " - " + desc + color.RED + " - Inactive\n" + color.RESET, sep='\n')
+    choice = input(color.YELLOW + "\nWhich law would you like to change? Use 0 to exit >" + color.RESET)
+    if choice == '0':
+        pass
+    elif choice not in game_laws[law_cat]['laws']:
+        print("Not a valid law...")
+        screen_clear()
+        law_activation_handler(law_cat)
+    else:
+        law_change = game_laws[law_cat]['laws'][choice]['active']
+        game_laws[law_cat]['laws'][choice]['active'] = not law_change
+        screen_clear()
+        law_activation_handler(law_cat)

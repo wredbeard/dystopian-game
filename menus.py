@@ -54,12 +54,11 @@ def prompt_simple(prompt_title, prompt_text):
     ww("\n" + prompt_text)
 
 
-
 def game_play_menu():
     prompt_selections = ['1|Read Reports', '2|Modify Laws', '3|Secret Police', '4|Personal Stuff', '5|Issue Orders',
                          '6|Ministries', '7|The National Bank', '8|Exit Game']
     choice = prompt(prompt_selections, "Main Menu", "This is your desk. You may execute all of the actions within your"
-                                                    "power from here.\n")
+                                                    " power from here.\n")
     if choice == '1':
         menu_reports()
     elif choice == '2':
@@ -86,7 +85,7 @@ def game_play_menu():
 def menu_reports():
     selections = ['1|Populace Report', '2|Crime Report', '3|Economic Report', '4|Bank Report', '5|Exit']
     choice = prompt(selections, "Reports Menu", "Here you can read reports about the status of our nation. Use it "
-                                                   "to make important decisions.")
+                                                "to make important decisions.")
     if choice == '1':
         menu_reports_populace()
     elif choice == '2':
@@ -122,6 +121,7 @@ def menu_reports_economy():
     input("\n\nPress ENTER to close report")
     menu_reports()
 
+
 def menu_reports_bank():
     functions.screen_clear()
     prompt_simple("Bank Report", "Information about current interest rates and revenues collected by The National Bank")
@@ -129,8 +129,43 @@ def menu_reports_bank():
     input("\n\nPress ENTER to close report")
     menu_reports()
 
+
 def menu_laws():
-    print('')
+    functions.screen_clear()
+    selections = ['1|Public Order', '2|Criminal', '3|Economic', '4|Health And Safety', '5|Go Back']
+    choice = prompt(selections, "Laws Menu", "Here you may enact and retract laws with varying "
+                                             "effects on your country,"
+                                             " industry, and population.")
+    if choice == '1':
+        menu_laws_public()
+    elif choice == '2':
+        menu_laws_crime()
+    elif choice == '3':
+        menu_laws_economy()
+    elif choice == '4':
+        menu_laws_health()
+    elif choice == '5':
+        game_play_menu()
+    else:
+        menu_laws()
+
+
+def menu_laws_public():
+    functions.screen_clear()
+    functions.law_activation_handler('pop_laws')
+    menu_laws()
+
+
+def menu_laws_crime():
+    pass
+
+
+def menu_laws_economy():
+    pass
+
+
+def menu_laws_health():
+    pass
 
 
 def menu_police():
@@ -177,7 +212,8 @@ def menu_bank():
         menu_bank()
     elif choice == '5':
         game_play_menu()
-    else: menu_bank()
+    else:
+        menu_bank()
 
 
 def game_settings_menu():

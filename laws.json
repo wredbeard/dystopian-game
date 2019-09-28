@@ -1,0 +1,26 @@
+{"pop_laws":
+{"title": "Population Compliance Laws",
+ "desc": "Laws useful for keeping your population compliant and well behaved. Fair warning, too much of this will create black markets and opposition to your rule.",
+  "laws": {
+    "1": {
+      "active": false,
+      "name": "Mass CCTV Surveillance",
+      "desc": "Cameras are installed at all street corners. Costly, but effective."
+    },
+    "2": {
+      "active": false,
+      "name": "Mandatory Checkpoints",
+      "desc": "Drivers must stop at checkpoints for inspection. Less costly, less effective."
+    },
+    "3": {
+      "active": false,
+      "name": "Drone Surveillance",
+      "desc": "Drones are used to patrol and track those suspected of undermining your party. Less costly, more effective."
+    },
+    "4": {
+      "active": false,
+      "name": "Curfews",
+      "desc": "Curfews are enforced for those who are not exempt. Costs nothing, Less costly, less effective."
+    }
+  }
+  }}
