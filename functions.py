@@ -1,9 +1,18 @@
 from data import game_config, game_config_write, game_laws
 import textwrap
 import colors
+import random
 
 
 color = colors.GameColors()
+
+
+# simple seeded rng
+def rand_gen(min, max):
+    rand_seed = random.SystemRandom()
+    random.seed(rand_seed)
+    rand_return = random.randint(min, max)
+    return rand_return
 
 
 # a simple cross platform way of clearing the console screen
@@ -14,6 +23,18 @@ def screen_clear():
 # wraps long text
 def wrd_wrp(str_to_wrap):
     print('\n'.join(textwrap.wrap(str_to_wrap, width=79, replace_whitespace=False)))
+
+
+# sets up new game
+def game_new():
+    game_population = rand_gen(1000000, 10000000)
+    game_criminals = rand_gen(0, round(game_population * 0.1))
+    game_businesses = rand_gen(round(game_population * 0.01), round(game_population * 0.03))
+    bank_funds = rand_gen(1000, 10000)
+    game_config['world']['population'] = game_population
+    game_config['world']['criminals'] = game_criminals
+    game_config['economy']['businesses'] = game_businesses
+    game_config['bank']['funds'] = bank_funds
 
 
 # makes functions where something needs to be displayed to user prettier
@@ -30,6 +51,7 @@ def game_new_setup(player_name, player_title, player_party):
     game_config['player']['name'] = player_name
     game_config['player']['title'] = player_title
     game_config['player']['party'] = player_party
+    game_config_write()
 
 
 # persistent player status bar
@@ -75,7 +97,7 @@ def gen_report_crime():
     print("\nAs well as an estimated " + str(game_config['crime']['crimes']['other']) + " crimes we have not yet "
                                                                                         "made up.")
 
-
+# reports health of economy
 def gen_report_economy():
     wrd_wrp("\nWe currently have around " + str(game_config['economy']['businesses']) + " factories and farms"
             " under our thumb.")
@@ -92,6 +114,7 @@ def gen_report_economy():
     print("\nRevenue from personal taxes: " + str(game_config['economy']['taxes']['p_rev']))
 
 
+# reports bank interest interest and income
 def gen_report_bank():
     out_interest = game_config['bank']['p_interest'] * game_config['bank']['total_funds']
     in_interest = game_config['bank']['i_interest'] * game_config['bank']['total_loaned']
@@ -106,6 +129,7 @@ def gen_report_bank():
     print("\nThe National Bank Income: + " + str(round(bank_revenue)))
 
 
+# controls bank deposits
 def bank_deposit():
     print("How much money would you like to deposit?")
     print("\nYou can deposit up to " + str(game_config['player']['money']))
@@ -129,6 +153,7 @@ def bank_deposit():
         bank_deposit()
 
 
+#controls bank withdrawals
 def bank_withdraw():
     print("How much would you like to withdraw? ")
     print("\nYou have " + str(game_config['bank']['p_money']) + " stored with us.")
@@ -153,6 +178,7 @@ def bank_withdraw():
         bank_deposit()
 
 
+# take out loans
 def bank_loan():
     loan_max = game_config['player']['money'] * 0.30
     if game_config['bank']['loan_out']:
@@ -177,6 +203,7 @@ def bank_loan():
             bank_loan()
 
 
+#pay back loans
 def bank_pay_loan():
     if not game_config['bank']['loan_out']:
         print("You do not have any loans to pay.")

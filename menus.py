@@ -9,6 +9,7 @@ console_width = 79
 
 def game_new_menu():
     functions.screen_clear()
+    functions.game_new()
     print("-" * console_width + color.YELLOW)
     print("Welcome to Dystopia")
     print("-" * console_width)
@@ -157,11 +158,15 @@ def menu_laws_public():
 
 
 def menu_laws_crime():
-    pass
+    functions.screen_clear()
+    functions.law_activation_handler('crime_laws')
+    menu_laws()
 
 
 def menu_laws_economy():
-    pass
+    functions.screen_clear()
+    functions.law_activation_handler("economy_laws")
+    menu_laws()
 
 
 def menu_laws_health():
