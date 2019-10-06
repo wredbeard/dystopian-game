@@ -2,7 +2,7 @@ from data import game_config, game_config_write, game_laws
 import textwrap
 import colors
 import random
-
+import os
 
 color = colors.GameColors()
 
@@ -17,7 +17,7 @@ def rand_gen(min, max):
 
 # a simple cross platform way of clearing the console screen
 def screen_clear():
-    print("\n" * 100)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 # wraps long text
