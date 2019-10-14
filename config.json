@@ -1,1 +1,61 @@
-{"player": {"name": "Bob", "money": 915, "power": 0, "leverage": 0, "party": "People", "title": "Non", "is_dead": false, "turn": 0}, "world": {"population": 3444551, "anger": 0, "revolting": false, "prisoners": 0, "hunger": 0, "criminals": 76392}, "crime": {"criminals": 0, "crimes_committed": 0, "crimes": {"murder": 0, "bribery": 0, "theft": 0, "other": 0}}, "economy": {"businesses": 53544, "taxes": {"b_tax": 0.05, "p_tax": 0.05, "b_rev": 0, "p_rev": 0}, "exports": {"human_parts": 0, "machines": 0, "agriculture": 0, "total": 0, "profits": 0}}, "bank": {"total_funds": 0, "p_interest": 0.05, "loan": 0, "p_money": 85, "i_interest": 0.07, "total_loaned": 0, "loan_out": false, "funds": 3387}}
+{
+  "player": {
+    "name": "Bob",
+    "money": 915,
+    "power": 0,
+    "leverage": 0,
+    "party": "Hobs",
+    "title": "Non",
+    "is_dead": false,
+    "turn": 0
+  },
+  "world": {
+    "population": 3444551,
+    "growth_mod": 0.01,
+    "anger": 0,
+    "health": 0,
+    "revolting": false,
+    "prisoners": 0,
+    "hunger": 0,
+    "criminals": 76392,
+    "religion": 0
+  },
+  "crime": {
+    "criminals": 0,
+    "crimes_committed": 0,
+    "crime_mod": 0.013,
+    "crimes": {
+      "murder": 0,
+      "bribery": 0,
+      "theft": 0,
+      "other": 0
+    }
+  },
+  "economy": {
+    "businesses": 53544,
+    "prod_mod": 1.2,
+    "taxes": {
+      "b_tax": 0.05,
+      "p_tax": 0.05,
+      "b_rev": 0,
+      "p_rev": 0
+    },
+    "exports": {
+      "human_parts": 0,
+      "machines": 0,
+      "agriculture": 0,
+      "total": 0,
+      "profits": 0
+    }
+  },
+  "bank": {
+    "total_funds": 0,
+    "p_interest": 0.05,
+    "loan": 0,
+    "p_money": 85,
+    "i_interest": 0.07,
+    "total_loaned": 0,
+    "loan_out": false,
+    "funds": 3387
+  }
+}

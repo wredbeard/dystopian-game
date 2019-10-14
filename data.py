@@ -20,3 +20,8 @@ with open('laws.json', 'r') as laws_file:
 def game_config_write():
     with open('config.json', 'w') as config_out_file:
         dump(game_config, config_out_file)
+
+
+def game_laws_write():
+    with open('laws.json', 'w') as laws_out_file:
+        dump(game_laws, laws_out_file)

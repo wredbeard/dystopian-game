@@ -57,7 +57,7 @@ def prompt_simple(prompt_title, prompt_text):
 
 def game_play_menu():
     prompt_selections = ['1|Read Reports', '2|Modify Laws', '3|Secret Police', '4|Personal Stuff', '5|Issue Orders',
-                         '6|Ministries', '7|The National Bank', '8|Exit Game']
+                         '6|Ministries', '7|The National Bank', '8|End Turn', '9|Exit Game']
     choice = prompt(prompt_selections, "Main Menu", "This is your desk. You may execute all of the actions within your"
                                                     " power from here.\n")
     if choice == '1':
@@ -74,7 +74,9 @@ def game_play_menu():
         menu_ministries()
     elif choice == '7':
         menu_bank()
-    elif choice == '8':
+    elif choice == '8-8':
+        functions.game_end_turn()
+    elif choice == '9':
         functions.screen_clear()
         print("Your game is automatically saved...")
         time.sleep(5)
@@ -170,7 +172,9 @@ def menu_laws_economy():
 
 
 def menu_laws_health():
-    pass
+    functions.screen_clear()
+    functions.law_activation_handler("health_laws")
+    menu_laws()
 
 
 def menu_police():

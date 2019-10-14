@@ -1,84 +1,116 @@
-{"pop_laws":
-{"title": "Population Compliance Laws",
- "desc": "Laws useful for keeping your population compliant and well behaved. Fair warning, too much of this will create black markets and opposition to your rule.",
-  "laws": {
-    "1": {
-      "active": false,
-      "name": "Mass CCTV Surveillance",
-      "desc": "Cameras are installed at all street corners. Costly, but effective."
-    },
-    "2": {
-      "active": false,
-      "name": "Mandatory Checkpoints",
-      "desc": "Drivers must stop at checkpoints for inspection. Less costly, less effective."
-    },
-    "3": {
-      "active": false,
-      "name": "Drone Surveillance",
-      "desc": "Drones are used to patrol and track those suspected of undermining your party. Less costly, more effective."
-    },
-    "4": {
-      "active": false,
-      "name": "Curfews",
-      "desc": "Curfews are enforced for those who are not exempt. Costs nothing, Less costly, less effective."
+{
+  "pop_laws": {
+    "title": "Population Compliance Laws",
+    "desc": "Laws useful for keeping your population compliant and well behaved. Fair warning, too much of this will create black markets and opposition to your rule.",
+    "laws": {
+      "1": {
+        "active": false,
+        "name": "Mass CCTV Surveillance",
+        "desc": "Cameras are installed at all street corners. Costly, but effective."
+      },
+      "2": {
+        "active": false,
+        "name": "Mandatory Checkpoints",
+        "desc": "Drivers must stop at checkpoints for inspection. Less costly, less effective."
+      },
+      "3": {
+        "active": false,
+        "name": "Drone Surveillance",
+        "desc": "Drones are used to patrol and track those suspected of undermining your party. Less costly, more effective."
+      },
+      "4": {
+        "active": false,
+        "name": "Curfews",
+        "desc": "Curfews are enforced for those who are not exempt. Costs nothing, Less costly, less effective."
+      }
     }
-  }
   },
-"crime_laws": {
-  "title": "Crime Laws",
-  "desc": "What's better than making people pay for arbitrary laws? Making them work for them! Here's where we make innocuous daily activities illegal. More prisoners = more free labor. However, we don't want to go too far. We still need taxpayers to pay for the system that keeps them down. Of course, there are the standard common sense laws, too. So we have that sense of credibility.",
-  "laws": {
-    "5": {
-      "active": true,
-      "name": "Murder",
-      "desc": "Makes murder illegal depending on what we define as murder that day"
-    },
-    "6": {
-      "active": true,
-      "name": "Theft",
-      "desc": "Makes theft illegal from those deemed important enough"
-    },
-    "7": {
-      "active": true,
-      "name": "Kidnapping",
-      "desc": "Makes kidnapping illegal but state sanctioned kidnappings exempt"
-    },
-    "8": {
-      "active": false,
-      "name": "Bribery",
-      "desc": "Makes bribery illegal unless the bribe is good enough to forget attempts at bribery"
-    },
-    "9": {
-      "active": false,
-      "name": "Possession Of Religious Texts",
-      "desc": "There is but one religion - the state"
-    },
-    "10": {
-      "active": false,
-      "name": "Excessive Eating",
-      "desc": "When food supplies are short you may have to cut back on the prime rib - what a dreadful thought"
-    }}},
-"economy_laws": {
-  "title": "Economic Laws",
-  "desc": "Economic modifications can benefit your pocketbook or your populace. Feel free to dangle a few things above their heads.",
-  "laws": {
-    "11": {
-      "active":  false,
-      "name":  "Increase income tax",
-      "desc":  "Increases income tax on all populace. Will probably cause some pop anger."},
-    "12": {
-      "active": false,
-      "name": "Increase industry tax",
-      "desc": "Increases tax on industries. May induce side effects such as lowered production, decreased jobs, and assassination."},
-    "13": {
-      "active": false,
-      "name": "Increase industry subsidies",
-      "desc": "Will increase subsidies for industry. Increases production, employment, and industry income at the cost of money in the treasury."},
-    "14": {
-      "active": false,
-      "name": "Flat money distribution",
-      "desc": "Gives a flat amount of money to each household every year. 12 easy payments of 1000 dollars. Lowers crime, lowers unemployment, increases pop happiness. Effects take some time to work."
+  "crime_laws": {
+    "title": "Crime Laws",
+    "desc": "What's better than making people pay for arbitrary laws? Making them work for them! Here's where we make innocuous daily activities illegal. More prisoners = more free labor. However, we don't want to go too far. We still need taxpayers to pay for the system that keeps them down. Of course, there are the standard common sense laws, too. So we have that sense of credibility.",
+    "laws": {
+      "1": {
+        "active": true,
+        "name": "Murder",
+        "desc": "Makes murder illegal depending on what we define as murder that day"
+      },
+      "2": {
+        "active": true,
+        "name": "Theft",
+        "desc": "Makes theft illegal from those deemed important enough"
+      },
+      "3": {
+        "active": true,
+        "name": "Kidnapping",
+        "desc": "Makes kidnapping illegal but state sanctioned kidnappings exempt"
+      },
+      "4": {
+        "active": false,
+        "name": "Bribery",
+        "desc": "Makes bribery illegal unless the bribe is good enough to forget attempts at bribery"
+      },
+      "5": {
+        "active": false,
+        "name": "Possession Of Religious Texts",
+        "desc": "There is but one religion - the state"
+      },
+      "6": {
+        "active": false,
+        "name": "Excessive Eating",
+        "desc": "When food supplies are short you may have to cut back on the prime rib - what a dreadful thought"
+      }
+    }
+  },
+  "economy_laws": {
+    "title": "Economic Laws",
+    "desc": "Economic modifications can benefit your pocketbook or your populace. Feel free to dangle a few things above their heads.",
+    "laws": {
+      "1": {
+        "active": false,
+        "name": "Increase income tax",
+        "desc": "Increases income tax on all populace. Will probably cause some pop anger."
+      },
+      "2": {
+        "active": false,
+        "name": "Increase industry tax",
+        "desc": "Increases tax on industries. May induce side effects such as lowered production, decreased jobs, and assassination."
+      },
+      "3": {
+        "active": false,
+        "name": "Increase industry subsidies",
+        "desc": "Will increase subsidies for industry. Increases production, employment, and industry income at the cost of money in the treasury."
+      },
+      "4": {
+        "active": false,
+        "name": "Flat money distribution",
+        "desc": "Gives a flat amount of money to each household every year. 12 easy payments of 1000 dollars. Lowers crime, lowers unemployment, increases pop happiness. Effects take some time to work."
+      }
+    }
+  },
+  "health_laws": {
+    "title": "Health and Safety Laws",
+    "desc": "Unfortunately, our people are not robots, and sometimes they need some standards of care. Sometimes, there are too many to feed and it's okay if a few are left to... fall off.",
+    "laws": {
+      "1": {
+        "active": true,
+        "name": "Sanitation Standards",
+        "desc": "Uphold high standards of sanitation, will increase population over time."
+      },
+      "2": {
+        "active": false,
+        "name": "Ban Smoking",
+        "desc": "While smoking is a health hazard, we advertise that it's good for you! Thus limiting the population over time. Banning the practice, we just take all of the tobacco away! Population and health increase."
+      },
+      "3": {
+        "active": false,
+        "name": "Nutritional Guidance",
+        "desc": "Despite the name, we really just force people to eat a certain way. Uses more food, but boosts agriculture."
+      },
+      "4": {
+        "active": false,
+        "name": "Occupational Health Standards",
+        "desc": "We institute a bare minimum of 'protection' against occupational hazards. Production goes down, health goes up."
+      }
     }
   }
 }
-  }

@@ -1,4 +1,4 @@
-from data import game_config, game_config_write, game_laws
+from data import game_config, game_config_write, game_laws, game_laws_write
 import textwrap
 import colors
 import random
@@ -8,10 +8,10 @@ color = colors.GameColors()
 
 
 # simple seeded rng
-def rand_gen(min, max):
+def rand_gen(min_num, max_num):
     rand_seed = random.SystemRandom()
     random.seed(rand_seed)
-    rand_return = random.randint(min, max)
+    rand_return = random.randint(min_num, max_num)
     return rand_return
 
 
@@ -32,7 +32,7 @@ def game_new():
     game_businesses = rand_gen(round(game_population * 0.01), round(game_population * 0.03))
     bank_funds = rand_gen(1000, 10000)
     game_config['world']['population'] = game_population
-    game_config['world']['criminals'] = game_criminals
+    game_config['crime']['criminals'] = game_criminals
     game_config['economy']['businesses'] = game_businesses
     game_config['bank']['funds'] = bank_funds
 
@@ -66,7 +66,13 @@ def player_stats():
 # exits and saves the game
 def game_save_exit():
     game_config_write()
+    game_laws_write()
     return 0
+
+
+# turn handler
+def game_end_turn():
+    game_law_effects()
 
 
 # generates a report on population and their attitudes
@@ -96,6 +102,7 @@ def gen_report_crime():
     print("\nThefts: " + str(game_config['crime']['crimes']['theft']))
     print("\nAs well as an estimated " + str(game_config['crime']['crimes']['other']) + " crimes we have not yet "
                                                                                         "made up.")
+
 
 # reports health of economy
 def gen_report_economy():
@@ -153,7 +160,7 @@ def bank_deposit():
         bank_deposit()
 
 
-#controls bank withdrawals
+# controls bank withdrawals
 def bank_withdraw():
     print("How much would you like to withdraw? ")
     print("\nYou have " + str(game_config['bank']['p_money']) + " stored with us.")
@@ -203,7 +210,7 @@ def bank_loan():
             bank_loan()
 
 
-#pay back loans
+# pay back loans
 def bank_pay_loan():
     if not game_config['bank']['loan_out']:
         print("You do not have any loans to pay.")
@@ -258,3 +265,110 @@ def law_activation_handler(law_cat):
         game_laws[law_cat]['laws'][choice]['active'] = not law_change
         screen_clear()
         law_activation_handler(law_cat)
+
+
+def game_law_effects():
+    pop_laws = game_laws['pop_laws']['laws']
+    crime_laws = game_laws['crime_laws']['laws']
+    economy_laws = game_laws['economy_laws']['laws']
+    health_laws = game_laws['health_laws']['laws']
+
+    # pop laws
+    if pop_laws['1']['active']:
+        game_config['crime']['criminals'] -= round(game_config['crime']['criminals'] * 0.1)
+        if game_config['crime']['criminals'] <= 0:
+            game_config['crime']['criminals'] = 0
+    else:
+        pass
+    if pop_laws['2']['active']:
+        game_config['crime']['criminals'] -= round(game_config['crime']['criminals'] * 0.05)
+        if game_config['crime']['criminals'] <= 0:
+            game_config['crime']['criminals'] = 0
+    else:
+        pass
+    if pop_laws['3']['active']:
+        game_config['crime']['criminals'] -= round(game_config['crime']['criminals'] * 0.1)
+        if game_config['crime']['criminals'] <= 0:
+            game_config['crime']['criminals'] = 0
+    else:
+        pass
+    if pop_laws['4']['active']:
+        game_config['crime']['criminals'] -= round(game_config['crime']['criminals'] * 0.01)
+        if game_config['crime']['criminals'] <= 0:
+            game_config['crime']['criminals'] = 0
+    else:
+        pass
+
+    # crime laws
+    if crime_laws['1']['active']:
+        game_config['crime']['crimes']['murder'] -= round(game_config['crime']['crimes']['murder'] * 0.75)
+        game_config['world']['population'] += round(game_config['world']['population'] * 0.0075)
+        game_config['world']['anger'] -= 1
+    else:
+        pass
+    if crime_laws['2']['active']:
+        game_config['crime']['crimes']['theft'] -= round(game_config['crime']['crimes']['theft'] * 0.75)
+    else:
+        pass
+    if crime_laws['3']['active']:
+        game_config['crime']['crimes']['other'] -= round(game_config['crime']['crimes']['theft'] * 0.05)
+    else:
+        pass
+    if crime_laws['4']['active']:
+        game_config['crime']['crimes']['bribery'] -= round(game_config['crime']['crimes']['bribery'] * 0.75)
+    else:
+        pass
+    if crime_laws['5']['active']:
+        if game_config['world']['religion'] <= 0:
+            pass
+        else:
+            game_config['world']['religion'] -= 1
+    else:
+        pass
+    if crime_laws['6']['active']:
+        game_config['world']['hunger'] -= round(100 * 0.20)
+    else:
+        pass
+
+    # economy laws
+    if economy_laws['1']['active']:
+        game_config['economy']['p_tax'] = 0.07
+    else:
+        game_config['economy']['p_tax'] = 0.05
+    if economy_laws['2']['active']:
+        game_config['economy']['b_tax'] = 0.07
+        game_config['economy']['prod_mod'] = .75
+    else:
+        game_config['economy']['b_tax'] = 0.05
+    if economy_laws['3']['active']:
+        game_config['economy']['prod_mod'] = 1.5
+    else:
+        pass
+    if economy_laws['4']['active']:
+        game_config['economy']['prod_mod'] = 1.6
+        game_config['crime']['crime_mod'] = 0.007
+        game_config['world']['anger'] -= 1
+    else:
+        pass
+
+    # health laws
+    if health_laws['1']['active']:
+        game_config['world']['growth_mod'] = 0.02
+    else:
+        pass
+    if health_laws['2']['active']:
+        game_config['world']['growth_mod'] += 0.01
+        if game_config['world']['health'] <= 100:
+            game_config['world']['health'] += 1
+    else:
+        game_config['world']['growth_mod'] -= 0.01
+    if health_laws['3']['active']:
+        game_config['economy']['exports']['agriculture'] += 10
+        game_config['world']['hunger'] -= round(100 * .01)
+    else:
+        pass
+    if health_laws['4']['active']:
+        game_config['economy']['prod_mod'] -= .02
+        game_config['world']['health'] += round(100 * .01)
+    else:
+        pass
