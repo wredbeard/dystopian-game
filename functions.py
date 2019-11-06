@@ -28,14 +28,13 @@ def wrd_wrp(str_to_wrap):
 # sets up new game
 def game_new():
     game_population = rand_gen(1000000, 10000000)
-    game_criminals = rand_gen(0, round(game_population * 0.1))
-    game_businesses = rand_gen(round(game_population * 0.01), round(game_population * 0.03))
-    bank_funds = rand_gen(1000, 10000)
     game_config['world']['population'] = game_population
-    game_config['crime']['criminals'] = game_criminals
-    game_config['economy']['businesses'] = game_businesses
-    game_config['bank']['funds'] = bank_funds
-
+    game_config['crime']['criminals'] = rand_gen(0, round(game_population * 0.01))
+    game_config['economy']['businesses'] = rand_gen(round(game_population * 0.02), round(game_population * 0.03))
+    game_config['bank']['funds'] = rand_gen(1000, 10000)
+    game_config['bank']['p_money'] = rand_gen(10000, 100000)
+    game_config['bank']['funds'] = rand_gen(1000000, 10000000)
+    game_crime_handler()
 
 # makes functions where something needs to be displayed to user prettier
 def content_template(title, text):
@@ -51,6 +50,26 @@ def game_new_setup(player_name, player_title, player_party):
     game_config['player']['name'] = player_name
     game_config['player']['title'] = player_title
     game_config['player']['party'] = player_party
+    game_config['player']['money'] = 10000
+    game_config['player']['power'] = 10
+    game_config['player']['leverage'] = 1
+    game_config['player']['is_dead'] = False
+    game_config['player']['turn'] = 0
+    game_config['world']['growth_mod'] = 0.01
+    game_config['world']['anger'] = 10
+    game_config['world']['health'] = 50
+    game_config['world']['revolting'] = False
+    game_config['world']['prisoners'] = rand_gen(1000, 10000)
+    game_config['world']['hunger'] = 0
+    game_config['world']['religion'] = 10
+    game_config['crime']['crimes_committed'] = 0
+    game_config['crime']['crime_mod'] = 0.013
+    game_config['economy']['prod_mod'] = 1.0
+    game_config['economy']['taxes']['b_tax'] = 0.05
+    game_config['economy']['taxes']['p_tax'] = 0.05
+    game_config['bank']['p_interest'] = 0.05
+    game_config['bank']['i_interest'] = 0.07
+    game_config['bank']['loan'] = 0
     game_config_write()
 
 
@@ -67,12 +86,25 @@ def player_stats():
 def game_save_exit():
     game_config_write()
     game_laws_write()
+    game_law_effects()
     return 0
 
 
 # turn handler
 def game_end_turn():
     game_law_effects()
+    game_crime_handler()
+
+
+# handles crime on turn end and game start
+def game_crime_handler():
+    base_crime = game_config['crime']['criminals']
+    game_config['crime']['crimes_committed'] = round(base_crime * .9)
+    total_crime = round(game_config['crime']['crimes_committed'])
+    game_config['crime']['crimes']['murder'] = rand_gen(0, total_crime)
+    game_config['crime']['crimes']['bribery'] = rand_gen(0, total_crime)
+    game_config['crime']['crimes']['theft'] = rand_gen(0, total_crime)
+    game_config['crime']['crimes']['other'] = rand_gen(0, total_crime)
 
 
 # generates a report on population and their attitudes
@@ -96,7 +128,7 @@ def gen_report_populace():
 def gen_report_crime():
     wrd_wrp("\nOur 'aggregate' data tells us that there are around " + str(game_config['crime']['criminals']) + " active"
             " criminals at large.")
-    print("\nWe have determined there were " + str(game_config['crime']['crimes_committed']) + "this year.")
+    print("\nWe have determined there were " + str(game_config['crime']['crimes_committed']) + " crimes this year.")
     print("\nMurders: " + str(game_config['crime']['crimes']['murder']))
     print("\nBribes: " + str(game_config['crime']['crimes']['bribery']))
     print("\nThefts: " + str(game_config['crime']['crimes']['theft']))
@@ -238,7 +270,7 @@ def bank_pay_loan():
                     print("\nYou pay nothing.")
                     game_config_write()
         except TypeError:
-            print("\nI have no had enough coffee to deal with your 'ineptitude'.")
+            print("\nI have not had enough coffee to deal with your 'ineptitude'.")
 
 
 # key of category in laws.json is passed to handler to activate/deactivate laws
@@ -372,3 +404,5 @@ def game_law_effects():
         game_config['world']['health'] += round(100 * .01)
     else:
         pass
+
+

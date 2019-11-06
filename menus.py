@@ -178,19 +178,22 @@ def menu_laws_health():
 
 
 def menu_police():
-    print('')
+    print('NOT AVAILABLE')
+    game_play_menu()
 
 
 def menu_personal():
-    print('')
+    print('NOT AVAILABLE')
+    game_play_menu()
 
 
 def menu_orders():
-    print('')
-
+    print('NOT AVAILABLE')
+    game_play_menu()
 
 def menu_ministries():
-    print('')
+    print('NOT AVAILABLE')
+    game_play_menu()
 
 
 def menu_bank():
