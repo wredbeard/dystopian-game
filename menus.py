@@ -74,8 +74,9 @@ def game_play_menu():
         menu_ministries()
     elif choice == '7':
         menu_bank()
-    elif choice == '8-8':
+    elif choice == '8':
         functions.game_end_turn()
+        game_play_menu()
     elif choice == '9':
         functions.screen_clear()
         print("Your game is automatically saved...")

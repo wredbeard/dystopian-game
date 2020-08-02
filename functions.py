@@ -89,12 +89,14 @@ def game_save_exit():
     game_law_effects()
     return 0
 
+def turn_counter():
+    game_config['player']['turn'] += 1
 
 # turn handler
 def game_end_turn():
     game_law_effects()
     game_crime_handler()
-
+    turn_counter()
 
 # handles crime on turn end and game start
 def game_crime_handler():
